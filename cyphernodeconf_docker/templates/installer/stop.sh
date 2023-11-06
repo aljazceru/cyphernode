@@ -37,7 +37,7 @@ stop_apps() {
         if [ "$DOCKER_MODE" = "swarm" ]; then
           docker stack rm $APP_ID
         elif [ "$DOCKER_MODE" = "compose" ]; then
-          docker-compose -p $APP_ID -f $APP_SCRIPT_PATH/docker-compose.yaml down
+          docker compose -p $APP_ID -f $APP_SCRIPT_PATH/docker-compose.yaml down
         fi
 
       fi
@@ -53,5 +53,5 @@ export USER=$(id -u):$(id -g)
 <% if (docker_mode == 'swarm') { %>
 docker stack rm cyphernode
 <% } else if(docker_mode == 'compose') { %>
-docker-compose -p cyphernode -f ${current_path}/docker-compose.yaml down
+docker compose -p cyphernode -f ${current_path}/docker-compose.yaml down
 <% } %>

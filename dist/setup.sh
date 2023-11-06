@@ -721,13 +721,6 @@ check_docker() {
   fi
 }
 
-check_docker_compose() {
-  if ! [ -x "$(command -v docker-compose)" ]; then
-    echo "          [31mdocker-compose is not installed on your system. Please check https://docs.docker.com/compose/install/.[0m"
-    exit
-  fi
-}
-
 sanity_checks_pre_config() {
   echo "    [32mcheck[0m requirements for configuration step."
   check_docker
@@ -736,11 +729,6 @@ sanity_checks_pre_config() {
 sanity_checks_pre_install() {
 
   echo "    [32mcheck[0m requirements for installation step."
-
-  check_docker
-  if [[ $DOCKER_MODE == 'compose' ]]; then
-    check_docker_compose
-  fi
 
   local OS=$(uname -s)
 
@@ -802,7 +790,7 @@ sanity_checks_pre_install() {
 install_apps() {
   if [ ! -d "$current_path/apps" ]; then
     local user=$(id -u $RUN_AS_USER):$(id -g $RUN_AS_USER)
-    local apps_repo="https://github.com/SatoshiPortal/cypherapps.git"
+    local apps_repo="https://github.com/aljazceru/cypherapps.git"
     echo "   [32mclone[0m $apps_repo into apps"
     docker run --rm -v "$current_path":/git --entrypoint sh cyphernode/cyphernodeconf:$CONF_VERSION -c "git clone --single-branch -b ${CYPHERAPPS_VERSION} \"$apps_repo\" /git/apps > /dev/null 2>&1 ; chown -R $user /git/apps"
   fi
